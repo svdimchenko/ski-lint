@@ -1,6 +1,5 @@
 import logging
 import subprocess
-
 from importlib.metadata import version
 
 from ski_lint import run
