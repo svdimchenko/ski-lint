@@ -1,0 +1,6 @@
+- id: ski-lint
+  name: Enforce ASCII
+  description: Reject files with non-ASCII encoding.
+  entry: ski-lint --check
+  language: python
+  types: [text]

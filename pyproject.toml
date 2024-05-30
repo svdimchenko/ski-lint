@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "ski-lint"
+version = "0.1.0"
+description = "A pre-commit hook, that enforces ASCII content."
+authors = ["Serhii Dimchenko <svdimchenko@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/svdimchenko/ski-lint/"
+repository = "https://github.com/svdimchenko/ski-lint/"
+
+# https://pypi.org/pypi?%3Aaction=list_classifiers
+classifiers = [
+	"Programming Language :: Python",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+	"Development Status :: 4 - Beta",
+	"License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+]
+
+[tool.poetry.scripts]
+ski-lint = 'ski_lint.cli:main'
+
+[tool.poetry.extras]
+test = ["nox"]
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+chardet = "^5.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.1"
+isort = "^5.13.2"
+black = "^24.4.2"
+pre-commit = "^3.0.0"
+nox = "^2024.4.15"
+mypy = "^1.10.0"
+
+[tool.black]
+line-length = 120
+target-version = ["py39", "py310", "py311"]
+
+[tool.isort]
+profile = "black"
+src_paths = ["enforce_ascii", "tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
