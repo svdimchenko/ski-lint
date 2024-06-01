@@ -5,7 +5,7 @@ from importlib.metadata import version
 from ski_lint import run
 
 
-def test_cli_version(exp_version):
+def test_cli_version():
     cmd = ["ski-lint", "--version"]
     res = subprocess.run(cmd, capture_output=True, text=True)
     assert res.returncode == 0
@@ -23,9 +23,11 @@ def test_files_output_bad(caplog, test_files_bad):
     exp = [
         "tests/files/bad/special.txt (Windows-1252): 'there…'",
         "tests/files/bad/umlaut.txt (utf-8): 'föur', 'käle', 'Åir'",
+        "tests/files/bad/cyrillic.txt (utf-8): 'зʼїм', 'ліс', 'символы', 'съел', 'тест', 'єнот'",
     ]
     run(*test_files_bad)
     assert all([e in caplog.text for e in exp])
+    assert "tests/files/bad/ascii.txt" not in caplog.text
 
 
 def test_check_mode_good(test_files_good):

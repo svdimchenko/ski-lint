@@ -5,7 +5,7 @@ import sys
 from argparse import ArgumentParser, Namespace
 from importlib.metadata import version
 
-from .utils import get_non_ascii_files, get_non_ascii_words
+from ski_lint.utils import get_non_ascii_files, get_non_ascii_words
 
 logging.basicConfig(format="{asctime} - {levelname} - {message}", level=logging.INFO, style="{", stream=sys.stdout)
 log = logging.getLogger(__name__)
