@@ -27,7 +27,7 @@ def test_files_output_bad(caplog, test_files_bad):
         "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
         "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (U+200b) at the end!U+200b'",
     ]
-    run(*test_files_bad, context_width=50, accepted_chars=[])
+    run(*test_files_bad, context_width=50)
     assert all([e in caplog.text for e in exp])
 
 

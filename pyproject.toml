@@ -34,6 +34,7 @@ black = "^24.4.2"
 pre-commit = "^3.0.0"
 nox = "^2024.4.15"
 mypy = "^1.10.0"
+types-pyyaml = "^6.0.12.20240917"
 
 [tool.black]
 line-length = 120

@@ -1,11 +1,13 @@
 """A pre-commit hook, that rejects files containing non-ASCII characters."""
 
 import logging
-from pathlib import Path
 import sys
-import yaml
 from argparse import ArgumentParser, Namespace
 from importlib.metadata import version
+from pathlib import Path
+from typing import Any
+
+import yaml
 
 from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
 
@@ -35,7 +37,7 @@ def get_args() -> Namespace:
     return args
 
 
-def get_config(filename: str) -> dict:
+def get_config(filename: str) -> dict[str, Any]:
     config = {}
     config_file = Path(filename)
     if config_file.exists():
@@ -45,7 +47,7 @@ def get_config(filename: str) -> dict:
     return config
 
 
-def run(*filenames: str, check: bool = False, context_width: int, accepted_chars: list = []) -> int:
+def run(*filenames: str, check: bool = False, context_width: int, accepted_chars: list[str] = []) -> int:
     bad_encodings = get_non_ascii_files(*filenames)
 
     has_non_ascii_files = False
