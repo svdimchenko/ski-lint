@@ -25,6 +25,7 @@ test = ["nox"]
 [tool.poetry.dependencies]
 python = ">=3.9"
 chardet = "^5.2.0"
+pyyaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"

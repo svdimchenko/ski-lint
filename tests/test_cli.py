@@ -25,10 +25,27 @@ def test_files_output_bad(caplog, test_files_bad):
         "tests/files/bad/umlaut.txt (utf-8), line 1, pos 349, char 'ä', context: 'y next level pitchfork käle chips leggings gastrop'",
         "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
         "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
-        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (\\u200b) at the end!U+200b'",
+        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (U+200b) at the end!U+200b'",
     ]
-    run(*test_files_bad, context_width=50)
+    run(*test_files_bad, context_width=50, accepted_chars=[])
     assert all([e in caplog.text for e in exp])
+
+
+def test_files_output_bad_accepted_values(caplog, test_files_bad):
+    run(*test_files_bad, context_width=50, accepted_chars=["ä", "…"])
+
+    exp = [
+        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
+        "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
+        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (U+200b) at the end!U+200b'",
+    ]
+    assert all([e in caplog.text for e in exp])
+
+    not_exp = [
+        "tests/files/bad/special.txt (Windows-1252), line 1, pos 9, char '…', context: 'Hi there…'",
+        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 349, char 'ä', context: 'y next level pitchfork käle chips leggings gastrop'",
+    ]
+    assert all([ne not in caplog.text for ne in not_exp])
 
 
 def test_check_mode_good(test_files_good):

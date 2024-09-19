@@ -1,7 +1,9 @@
 """A pre-commit hook, that rejects files containing non-ASCII characters."""
 
 import logging
+from pathlib import Path
 import sys
+import yaml
 from argparse import ArgumentParser, Namespace
 from importlib.metadata import version
 
@@ -28,12 +30,25 @@ def get_args() -> Namespace:
     )
     ap.add_argument("filenames", nargs="+", metavar="FILENAME", help="path to the files to check")
     ap.add_argument("--context-width", type=int, default=50, help="width of the context of the non-ASCII line")
+    ap.add_argument("--config", type=str, default=".ski-lint.yml", help="path to config file")
     args = ap.parse_args()
     return args
 
 
-def run(*filenames: str, check: bool = False, context_width: int) -> int:
+def get_config(filename: str) -> dict:
+    config = {}
+    config_file = Path(filename)
+    if config_file.exists():
+        with open(config_file) as yaml_file:
+            config = yaml.safe_load(yaml_file)
+            config = {} if config is None else config
+    return config
+
+
+def run(*filenames: str, check: bool = False, context_width: int, accepted_chars: list = []) -> int:
     bad_encodings = get_non_ascii_files(*filenames)
+
+    has_non_ascii_files = False
 
     if bad_encodings:
         for filename, encoding in bad_encodings.items():
@@ -41,30 +56,36 @@ def run(*filenames: str, check: bool = False, context_width: int) -> int:
 
             for line_result in non_ascii_lines:
                 for char, char_positions in line_result.chars.items():
-                    for char_pos in char_positions:
-                        context = extract_context(line_result.line, char_pos, context_width)
+                    if char not in accepted_chars:
+                        has_non_ascii_files = True
+                        for char_pos in char_positions:
+                            context = extract_context(line_result.line, char_pos, context_width)
 
-                        error_msg = f"{filename} ({encoding}), "
-                        error_msg += f"line {line_result.line_num}, "
-                        error_msg += f"pos {char_pos}, "
-                        if not char.isprintable():
-                            error_msg += f"non-printable char U+{ord(char):0x}, "
-                            context = context.replace(char, f"U+{ord(char):0x}")
-                        else:
-                            error_msg += f"char '{char}', "
-                        error_msg += f"context: '{context}'"
+                            error_msg = f"{filename} ({encoding}), "
+                            error_msg += f"line {line_result.line_num}, "
+                            error_msg += f"pos {char_pos}, "
+                            if not char.isprintable():
+                                error_msg += f"non-printable char U+{ord(char):0x}, "
+                                context = context.replace(char, f"U+{ord(char):0x}")
+                            else:
+                                error_msg += f"char '{char}', "
+                            error_msg += f"context: '{context}'"
 
-                        log.error(error_msg)
+                            log.error(error_msg)
 
+    if has_non_ascii_files:
+        if check:
+            return 1
     else:
         log.info("NON-ASCII CHECK: OK")
-
-    if bad_encodings and check:
-        return 1
 
     return 0
 
 
 def main() -> None:
     args = get_args()
-    sys.exit(run(*args.filenames, check=args.check, context_width=args.context_width))
+    config = get_config(args.config)
+
+    accepted_chars = [chr(int(value[2:], 16)) for value in config.get("accepted_values", [])]
+
+    sys.exit(run(*args.filenames, check=args.check, context_width=args.context_width, accepted_chars=accepted_chars))
