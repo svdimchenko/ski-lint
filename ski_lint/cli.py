@@ -7,8 +7,10 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
+from pydantic import ValidationError
 import yaml
 
+from .config import Config
 from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
 
 logging.basicConfig(
@@ -86,8 +88,15 @@ def run(*filenames: str, check: bool = False, context_width: int, accepted_chars
 
 def main() -> None:
     args = get_args()
-    config = get_config(args.config)
 
-    accepted_chars = [chr(int(value[2:], 16)) for value in config.get("accepted_values", [])]
+    try:
+        config = Config()
 
-    sys.exit(run(*args.filenames, check=args.check, context_width=args.context_width, accepted_chars=accepted_chars))
+        accepted_chars = [chr(int(value[2:], 16)) for value in config.accepted_values]
+
+        sys.exit(
+            run(*args.filenames, check=args.check, context_width=args.context_width, accepted_chars=accepted_chars)
+        )
+    except ValidationError as e:
+        print(e)
+        sys.exit(1)
