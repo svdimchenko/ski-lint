@@ -75,10 +75,10 @@ def run(*filenames: str, check: bool = False, context_width: int, accepted_chars
 
                             log.error(error_msg)
 
-    if has_non_ascii_files:
-        if check:
-            return 1
-    else:
+    if check and has_non_ascii_files:
+        return 1
+
+    if not has_non_ascii_files:
         log.info("NON-ASCII CHECK: OK")
 
     return 0
