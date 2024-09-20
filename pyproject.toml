@@ -25,7 +25,6 @@ test = ["nox"]
 [tool.poetry.dependencies]
 python = ">=3.9"
 chardet = "^5.2.0"
-pyyaml = "^6.0.2"
 pydantic-settings = "^2.5.2"
 
 [tool.poetry.group.dev.dependencies]
@@ -35,7 +34,6 @@ black = "^24.4.2"
 pre-commit = "^3.0.0"
 nox = "^2024.4.15"
 mypy = "^1.10.0"
-types-pyyaml = "^6.0.12.20240917"
 
 [tool.black]
 line-length = 120

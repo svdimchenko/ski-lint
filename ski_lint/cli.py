@@ -4,11 +4,8 @@ import logging
 import sys
 from argparse import ArgumentParser, Namespace
 from importlib.metadata import version
-from pathlib import Path
-from typing import Any
 
 from pydantic import ValidationError
-import yaml
 
 from .config import Config
 from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
@@ -37,16 +34,6 @@ def get_args() -> Namespace:
     ap.add_argument("--config", type=str, default=".ski-lint.yml", help="path to config file")
     args = ap.parse_args()
     return args
-
-
-def get_config(filename: str) -> dict[str, Any]:
-    config = {}
-    config_file = Path(filename)
-    if config_file.exists():
-        with open(config_file) as yaml_file:
-            config = yaml.safe_load(yaml_file)
-            config = {} if config is None else config
-    return config
 
 
 def run(*filenames: str, check: bool = False, context_width: int, accepted_chars: list[str] = []) -> int:
