@@ -43,15 +43,16 @@ def run(*filenames: str, check: bool = False, context_width: int) -> int:
                 for char, char_positions in line_result.chars.items():
                     for char_pos in char_positions:
                         context = extract_context(line_result.line, char_pos, context_width)
+                        unicode_notation = f"U+{ord(char):0X}"
 
                         error_msg = f"{filename} ({encoding}), "
                         error_msg += f"line {line_result.line_num}, "
                         error_msg += f"pos {char_pos}, "
                         if not char.isprintable():
-                            error_msg += f"non-printable char U+{ord(char):0x}, "
-                            context = context.replace(char, f"U+{ord(char):0x}")
+                            error_msg += f"non-printable char {unicode_notation}, "
+                            context = context.replace(char, unicode_notation)
                         else:
-                            error_msg += f"char '{char}', "
+                            error_msg += f"char {unicode_notation} '{char}', "
                         error_msg += f"context: '{context}'"
 
                         log.error(error_msg)
