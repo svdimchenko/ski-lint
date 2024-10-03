@@ -60,15 +60,16 @@ def run(config: OmegaConf) -> int:
                         has_non_ascii_files = True
                         for char_pos in char_positions:
                             context = extract_context(line_result.line, char_pos, config.context_width)
+                            unicode_notation = f"U+{ord(char):0X}"
 
                             error_msg = f"{filename} ({encoding}), "
                             error_msg += f"line {line_result.line_num}, "
                             error_msg += f"pos {char_pos}, "
                             if not char.isprintable():
-                                error_msg += f"non-printable char U+{ord(char):0x}, "
-                                context = context.replace(char, f"U+{ord(char):0x}")
+                                error_msg += f"non-printable char {unicode_notation}, "
+                                context = context.replace(char, unicode_notation)
                             else:
-                                error_msg += f"char '{char}', "
+                                error_msg += f"char {unicode_notation} '{char}', "
                             error_msg += f"context: '{context}'"
 
                             log.error(error_msg)
@@ -84,15 +85,28 @@ def run(config: OmegaConf) -> int:
 
 def main() -> None:
     args = get_args()
-    filtered_args_dict = {k: v for k, v in vars(args).items() if v is not None}
-    config_file = args.config_file or DefaultConfig.config_file
 
     try:
+        # Defaults and type validation
+        config = OmegaConf.structured(DefaultConfig)
+
+        # Config file (optional)
+        config_file = args.config_file or config.config_file
+        try:
+            config = OmegaConf.merge(
+                config,
+                OmegaConf.load(config_file),
+            )
+        except FileNotFoundError:
+            pass
+
+        # CLI args filtered dict (highest priority)
+        filtered_args_dict = {k: v for k, v in vars(args).items() if v is not None}
         config = OmegaConf.merge(
-            OmegaConf.structured(DefaultConfig),  # Defaults and type validation
-            OmegaConf.load(config_file),  # Config file
-            OmegaConf.create(filtered_args_dict),  # CLI args filtered dict (highest priority)
+            config,
+            OmegaConf.create(filtered_args_dict),
         )
+
         OmegaConf.set_readonly(config, True)
 
         sys.exit(run(config))

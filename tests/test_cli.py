@@ -30,11 +30,11 @@ def test_files_output_good(caplog, test_files_good):
 
 def test_files_output_bad(caplog, test_files_bad):
     exp = [
-        "tests/files/bad/special.txt (Windows-1252), line 1, pos 9, char '…', context: 'Hi there…'",
-        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 349, char 'ä', context: 'y next level pitchfork käle chips leggings gastrop'",
-        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
-        "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
-        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (U+200b) at the end!U+200b'",
+        "tests/files/bad/special.txt (Windows-1252), line 1, pos 9, char U+2026 '…', context: 'Hi there…'",
+        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 349, char U+E4 'ä', context: 'y next level pitchfork käle chips leggings gastrop'",
+        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char U+F6 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
+        "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char U+C5 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
+        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200B, context: 'ace (U+200B) at the end!U+200B'",
     ]
 
     config = OmegaConf.merge(
@@ -53,9 +53,9 @@ def test_files_output_bad_accepted_values(caplog, test_files_bad):
     run(config)
 
     exp = [
-        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
-        "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
-        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (U+200b) at the end!U+200b'",
+        "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char U+F6 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
+        "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char U+C5 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
+        "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200B, context: 'ace (U+200B) at the end!U+200B'",
     ]
     assert all([e in caplog.text for e in exp])
 
