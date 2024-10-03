@@ -5,6 +5,7 @@ import sys
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass, field
 from importlib.metadata import version
+
 from omegaconf import OmegaConf, ValidationError
 
 from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
