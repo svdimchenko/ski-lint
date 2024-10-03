@@ -2,12 +2,15 @@ import logging
 import subprocess
 from importlib.metadata import version
 
-from ski_lint import run
+from omegaconf import OmegaConf
+
+from ski_lint import run, DefaultConfig
 
 
 def test_cli_version(exp_version):
     cmd = ["ski-lint", "--version"]
     res = subprocess.run(cmd, capture_output=True, text=True)
+
     assert res.returncode == 0
     assert res.stdout.strip() == version("ski_lint")
 
@@ -15,7 +18,13 @@ def test_cli_version(exp_version):
 def test_files_output_good(caplog, test_files_good):
     with caplog.at_level(logging.INFO):
         exp = "NON-ASCII CHECK: OK"
-        run(*test_files_good, context_width=50)
+
+        config = OmegaConf.merge(
+            OmegaConf.structured(DefaultConfig),
+            OmegaConf.create({"filenames": test_files_good}),
+        )
+        run(config)
+
         assert exp in caplog.text
 
 
@@ -27,12 +36,21 @@ def test_files_output_bad(caplog, test_files_bad):
         "tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'",
         "tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200b, context: 'ace (U+200b) at the end!U+200b'",
     ]
-    run(*test_files_bad, context_width=50)
+
+    config = OmegaConf.merge(
+        OmegaConf.structured(DefaultConfig),
+        OmegaConf.create({"filenames": test_files_bad}),
+    )
+    run(config)
     assert all([e in caplog.text for e in exp])
 
 
 def test_files_output_bad_accepted_values(caplog, test_files_bad):
-    run(*test_files_bad, context_width=50, accepted_chars=["ä", "…"])
+    config = OmegaConf.merge(
+        OmegaConf.structured(DefaultConfig),
+        OmegaConf.create({"filenames": test_files_bad, "accepted_values": ["U+E4", "U+2026"]}),
+    )
+    run(config)
 
     exp = [
         "tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'",
