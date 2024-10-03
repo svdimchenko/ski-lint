@@ -3,8 +3,7 @@ import subprocess
 from importlib.metadata import version
 
 from omegaconf import OmegaConf
-
-from ski_lint import run, DefaultConfig
+from ski_lint import DefaultConfig, run
 
 
 def test_cli_version(exp_version):
