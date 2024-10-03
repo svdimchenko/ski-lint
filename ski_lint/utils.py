@@ -8,7 +8,7 @@ from .line_analysis_result import LineAnalysisResult
 ALLOWED_ENCODINGS = (None, "ascii")
 
 
-def get_encoding(*filenames: str) -> dict[str, chardet.ResultDict]:
+def get_encoding(filenames: list[str]) -> dict[str, chardet.ResultDict]:
     """Return encoding information for *filenames*.
 
     E.g.:
@@ -35,9 +35,9 @@ def get_encoding(*filenames: str) -> dict[str, chardet.ResultDict]:
     return encodings
 
 
-def get_non_ascii_files(*filenames: str) -> dict[str, Optional[str]]:
+def get_non_ascii_files(filenames: list[str]) -> dict[str, Optional[str]]:
     """Return dict of `filename: encoding` for files with not allowed encoding."""
-    encoding_info = get_encoding(*filenames)
+    encoding_info = get_encoding(filenames)
     return {
         filename: info["encoding"]
         for filename, info in encoding_info.items()
