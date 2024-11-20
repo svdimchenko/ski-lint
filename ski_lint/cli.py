@@ -39,7 +39,7 @@ def get_args() -> Namespace:
         action="store_true",
         help="return code is `1`, when non-ASCII files are found",
     )
-    ap.add_argument("filenames", nargs="+", metavar="FILENAME", help="path to the files to check")
+    ap.add_argument("filenames", nargs="*", metavar="FILENAME", help="path to the files to check")
     ap.add_argument("-w", "--context-width", type=int, help="width of the context of the non-ASCII line")
     ap.add_argument("-c", "--config-file", type=str, help="path to config file")
     args = ap.parse_args()
@@ -49,6 +49,10 @@ def get_args() -> Namespace:
 def get_config(args: Namespace) -> Union[ListConfig, DictConfig]:
     # Defaults and type validation
     config = OmegaConf.structured(DefaultConfig)
+
+    print()
+    print(f"default config: {config}")
+    print()
 
     # Config file (optional)
     config_file = args.config_file or config.config_file
@@ -61,14 +65,28 @@ def get_config(args: Namespace) -> Union[ListConfig, DictConfig]:
     except FileNotFoundError:
         pass
 
+    print()
+    print(f"config after file merge: {config}")
+    print()
+
     # CLI args filtered dict (highest priority)
-    filtered_args_dict = {k: v for k, v in vars(args).items() if v is not None}
+    filtered_args_dict = {k: v for k, v in vars(args).items() if v}
+    print(f"args: {args}")
+    print(f"vars(args): {vars(args)}")
+    print(f"filtered_args_dict: {filtered_args_dict}")
     config = OmegaConf.merge(
         config,
         OmegaConf.create(filtered_args_dict),
     )
 
+    print()
+    print(f"config after cli merge: {config}")
+    print()
+
     OmegaConf.set_readonly(config, True)
+
+    if not config.filenames:
+        raise ValidationError("No filenames provided")  # TODO: add a test for this
 
     return config
 
