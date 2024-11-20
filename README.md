@@ -4,10 +4,10 @@
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![image](https://img.shields.io/pypi/v/ruff.svg)](https://pypi.python.org/pypi/ski-lint)
-[![image](https://img.shields.io/pypi/l/ruff.svg)](https://github.com/svdimchenko/ski-lint/blob/main/LICENSE)
-[![image](https://img.shields.io/pypi/pyversions/ruff.svg)](https://pypi.python.org/pypi/ski-lint)
-[![Actions status](https://github.com/astral-sh/ruff/workflows/CI/badge.svg)](https://github.com/astral-sh/ruff/actions)
+[![image](https://img.shields.io/pypi/v/ski-lint.svg)](https://pypi.python.org/pypi/ski-lint)
+[![image](https://img.shields.io/pypi/l/ski-lint.svg)](https://github.com/svdimchenko/ski-lint/blob/main/LICENSE)
+[![image](https://img.shields.io/pypi/pyversions/ski-lint.svg)](https://pypi.python.org/pypi/ski-lint)
+[![Actions status](https://github.com/svdimchenko/ski-lint/actions/workflows/ci.yml/badge.svg)](https://github.com/astral-sh/ruff/actions)
 
 <!-- markdownlint-restore -->
 
@@ -83,5 +83,5 @@ This can be used as a [pre-commit](https://pre-commit.com/) hook:
 - repo: https://github.com/svdimchenko/ski-lint
   rev: v0.3.1
   hooks:
-      - id: ski-lint
+    - id: ski-lint
 ```
