@@ -1,3 +1,5 @@
+"""NOX configuration."""
+
 from pathlib import Path
 
 import nox

@@ -1,11 +1,12 @@
 """A pre-commit hook, that rejects files containing non-ASCII characters."""
 
+from __future__ import annotations
+
 import logging
 import sys
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass, field
 from importlib.metadata import version
-from typing import Union
 
 from omegaconf import DictConfig, ListConfig, OmegaConf, ValidationError
 
@@ -24,6 +25,8 @@ description = __doc__.strip()
 
 @dataclass
 class DefaultConfig:
+    """Default configuration."""
+
     accepted_values: list[str] = field(default_factory=list)
     check: bool = False
     config_file: str = ".ski-lint.yml"
@@ -32,6 +35,7 @@ class DefaultConfig:
 
 
 def get_args() -> Namespace:
+    """Get CLI arguments."""
     ap = ArgumentParser(description=description)
     ap.add_argument("--version", action="version", version=version("ski_lint"))
     ap.add_argument(
@@ -40,19 +44,21 @@ def get_args() -> Namespace:
         help="return code is `1`, when non-ASCII files are found",
     )
     ap.add_argument("filenames", nargs="*", metavar="FILENAME", help="path to the files to check")
-    ap.add_argument("-w", "--context-width", type=int, help="width of the context of the non-ASCII line")
+    ap.add_argument(
+        "-w",
+        "--context-width",
+        type=int,
+        help="width of the context of the non-ASCII line",
+    )
     ap.add_argument("-c", "--config-file", type=str, help="path to config file")
-    args = ap.parse_args()
-    return args
+    return ap.parse_args()
 
 
-def get_config(args: Namespace) -> Union[ListConfig, DictConfig]:
-    # Defaults and type validation
+def get_config(args: Namespace) -> ListConfig | DictConfig:
+    """Set default config, apply cli and config file overrides and validate thr resulting config."""
     config = OmegaConf.structured(DefaultConfig)
 
-    print()
-    print(f"default config: {config}")
-    print()
+    log.info(f"default config: {config}")
 
     # Config file (optional)
     config_file = args.config_file or config.config_file
@@ -65,33 +71,27 @@ def get_config(args: Namespace) -> Union[ListConfig, DictConfig]:
     except FileNotFoundError:
         pass
 
-    print()
-    print(f"config after file merge: {config}")
-    print()
+    log.info(f"config after file merge: {config}")
 
     # CLI args filtered dict (highest priority)
     filtered_args_dict = {k: v for k, v in vars(args).items() if v}
-    print(f"args: {args}")
-    print(f"vars(args): {vars(args)}")
-    print(f"filtered_args_dict: {filtered_args_dict}")
-    config = OmegaConf.merge(
-        config,
-        OmegaConf.create(filtered_args_dict),
-    )
+    log.info(f"args: {args}")
+    log.info(f"vars(args): {vars(args)}")
+    log.info(f"filtered_args_dict: {filtered_args_dict}")
+    config = OmegaConf.merge(config, OmegaConf.create(filtered_args_dict))
 
-    print()
-    print(f"config after cli merge: {config}")
-    print()
-
-    OmegaConf.set_readonly(config, True)
+    log.info(f"config after cli merge: {config}")
+    OmegaConf.set_readonly(conf=config, value=True)
 
     if not config.filenames:
-        raise ValidationError("No filenames provided")  # TODO: add a test for this
+        err_msg = "No filenames provided"
+        raise ValidationError(err_msg)
 
     return config
 
 
 def run(config: OmegaConf) -> int:
+    """Run validation."""
     bad_encodings = get_non_ascii_files(config.filenames)
     accepted_chars = [chr(int(value[2:], 16)) for value in config.accepted_values]
 
@@ -131,11 +131,7 @@ def run(config: OmegaConf) -> int:
 
 
 def main() -> None:
+    """Run the main entry point."""
     args = get_args()
-
-    try:
-        config = get_config(args)
-        sys.exit(run(config))
-    except ValidationError as e:
-        log.error(f"Configuration error: {e}")
-        sys.exit(1)
+    config = get_config(args)
+    sys.exit(run(config))
