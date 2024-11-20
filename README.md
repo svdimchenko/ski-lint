@@ -3,6 +3,11 @@
 <!-- markdownlint-disable MD013 -->
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![image](https://img.shields.io/pypi/v/ruff.svg)](https://pypi.python.org/pypi/ski-lint)
+[![image](https://img.shields.io/pypi/l/ruff.svg)](https://github.com/svdimchenko/ski-lint/blob/main/LICENSE)
+[![image](https://img.shields.io/pypi/pyversions/ruff.svg)](https://pypi.python.org/pypi/ski-lint)
+[![Actions status](https://github.com/astral-sh/ruff/workflows/CI/badge.svg)](https://github.com/astral-sh/ruff/actions)
 
 <!-- markdownlint-restore -->
 
@@ -39,15 +44,25 @@ options:
                         path to config file
 ```
 
-`CONFIG_FILE` is an optional yaml file (default `.ski-lint.yml`) in which you can override any CLI argument or add
-additional configuration:
+## Configuration
 
-```yml
+### `CONFIG_FILE`
+
+You can use an optional yaml file (default `.ski-lint.yml`) in which you can override any CLI argument
+or add additional configuration:
+
+```yml title=".ski-lint.yml"
 accepted_values:
-    - U+E4
-    - U+2026
+- U+E4
+- U+2026
 context_width: 50
 ```
+
+Hint: you may use the following [resource](https://www.compart.com/en/unicode) to get required unicode symbol.
+
+### Environment variables
+
+`SKI_LINT_LOG_LEVEL`(INFO, DEBUG, WARNING, ...): sets the corresponding log level, default is `INFO`.
 
 ### Example
 
