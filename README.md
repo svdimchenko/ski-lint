@@ -62,7 +62,7 @@ Hint: you may use the following [resource](https://www.compart.com/en/unicode) t
 
 ### Environment variables
 
-`SKI_LINT_LOG_LEVEL`(INFO, DEBUG, WARNING, ...): sets the corresponding log level.
+`SKI_LINT_LOG_LEVEL`(INFO, DEBUG, WARNING, ...): sets the corresponding log level, default is `INFO`.
 
 ### Example
 
