@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass, field
@@ -14,7 +15,7 @@ from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
 
 logging.basicConfig(
     format="{asctime} - {levelname} - {message}",
-    level=logging.INFO,
+    level=os.getenv("SKI_LINT_LOG_LEVEL", logging.INFO),
     style="{",
     stream=sys.stdout,
 )
@@ -58,7 +59,7 @@ def get_config(args: Namespace) -> ListConfig | DictConfig:
     """Set default config, apply cli and config file overrides and validate thr resulting config."""
     config = OmegaConf.structured(DefaultConfig)
 
-    log.info(f"default config: {config}")
+    log.debug(f"default config: {config}")
 
     # Config file (optional)
     config_file = args.config_file or config.config_file
@@ -71,16 +72,16 @@ def get_config(args: Namespace) -> ListConfig | DictConfig:
     except FileNotFoundError:
         pass
 
-    log.info(f"config after file merge: {config}")
+    log.debug(f"config after file merge: {config}")
 
     # CLI args filtered dict (highest priority)
     filtered_args_dict = {k: v for k, v in vars(args).items() if v}
-    log.info(f"args: {args}")
-    log.info(f"vars(args): {vars(args)}")
-    log.info(f"filtered_args_dict: {filtered_args_dict}")
+    log.debug(f"args: {args}")
+    log.debug(f"vars(args): {vars(args)}")
+    log.debug(f"filtered_args_dict: {filtered_args_dict}")
     config = OmegaConf.merge(config, OmegaConf.create(filtered_args_dict))
 
-    log.info(f"config after cli merge: {config}")
+    log.debug(f"config after cli merge: {config}")
     OmegaConf.set_readonly(conf=config, value=True)
 
     if not config.filenames:
