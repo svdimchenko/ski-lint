@@ -5,8 +5,9 @@ import sys
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass, field
 from importlib.metadata import version
+from typing import Union
 
-from omegaconf import OmegaConf, ValidationError
+from omegaconf import DictConfig, ListConfig, OmegaConf, ValidationError
 
 from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
 
@@ -43,6 +44,33 @@ def get_args() -> Namespace:
     ap.add_argument("-c", "--config-file", type=str, help="path to config file")
     args = ap.parse_args()
     return args
+
+
+def get_config(args: Namespace) -> Union[ListConfig, DictConfig]:
+    # Defaults and type validation
+    config = OmegaConf.structured(DefaultConfig)
+
+    # Config file (optional)
+    config_file = args.config_file or config.config_file
+    try:
+        config = OmegaConf.merge(
+            config,
+            OmegaConf.load(config_file),
+        )
+        log.info(f"Loaded config from {config_file}")
+    except FileNotFoundError:
+        pass
+
+    # CLI args filtered dict (highest priority)
+    filtered_args_dict = {k: v for k, v in vars(args).items() if v is not None}
+    config = OmegaConf.merge(
+        config,
+        OmegaConf.create(filtered_args_dict),
+    )
+
+    OmegaConf.set_readonly(config, True)
+
+    return config
 
 
 def run(config: OmegaConf) -> int:
@@ -88,28 +116,7 @@ def main() -> None:
     args = get_args()
 
     try:
-        # Defaults and type validation
-        config = OmegaConf.structured(DefaultConfig)
-
-        # Config file (optional)
-        config_file = args.config_file or config.config_file
-        try:
-            config = OmegaConf.merge(
-                config,
-                OmegaConf.load(config_file),
-            )
-        except FileNotFoundError:
-            pass
-
-        # CLI args filtered dict (highest priority)
-        filtered_args_dict = {k: v for k, v in vars(args).items() if v is not None}
-        config = OmegaConf.merge(
-            config,
-            OmegaConf.create(filtered_args_dict),
-        )
-
-        OmegaConf.set_readonly(config, True)
-
+        config = get_config(args)
         sys.exit(run(config))
     except ValidationError as e:
         log.error(f"Configuration error: {e}")
