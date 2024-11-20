@@ -22,7 +22,7 @@ pip install ski-lint
 
 ```shell
 $ ski-lint --help
-usage: ski-lint [-h] [--version] [--check] [--context-width CONTEXT_WIDTH] [--config-file CONFIG_FILE] FILENAME [FILENAME ...]
+usage: ski-lint [-h] [--version] [--check] [-w CONTEXT_WIDTH] [-c CONFIG_FILE] FILENAME [FILENAME ...]
 
 A pre-commit hook, that rejects files containing non-ASCII characters.
 
@@ -33,9 +33,9 @@ options:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
   --check               return code is `1`, when non-ASCII files are found
-  --context-width CONTEXT_WIDTH
+  -w, --context-width CONTEXT_WIDTH
                         width of the context of the non-ASCII line
-  --config-file CONFIG_FILE
+  -c, --config-file CONFIG_FILE
                         path to config file
 ```
 

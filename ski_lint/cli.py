@@ -39,8 +39,8 @@ def get_args() -> Namespace:
         help="return code is `1`, when non-ASCII files are found",
     )
     ap.add_argument("filenames", nargs="+", metavar="FILENAME", help="path to the files to check")
-    ap.add_argument("--context-width", type=int, help="width of the context of the non-ASCII line")
-    ap.add_argument("--config-file", type=str, help="path to config file")
+    ap.add_argument("-w", "--context-width", type=int, help="width of the context of the non-ASCII line")
+    ap.add_argument("-c", "--config-file", type=str, help="path to config file")
     args = ap.parse_args()
     return args
 
