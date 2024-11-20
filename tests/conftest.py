@@ -15,10 +15,10 @@ def exp_version():
 @pytest.fixture
 def test_files_good():
     path = TEST_PATH / "files" / "good"
-    return [p for p in path.glob("*.txt")]
+    return list(path.glob("*.txt"))
 
 
 @pytest.fixture
 def test_files_bad():
     path = TEST_PATH / "files" / "bad"
-    return [p for p in path.glob("*.txt")]
+    return list(path.glob("*.txt"))
