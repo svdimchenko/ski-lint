@@ -39,12 +39,13 @@ options:
                         path to config file
 ```
 
-`CONFIG_FILE` is an optional yaml file (default `.ski-lint.yml`) in which you can override any CLI argument or add additional configuration:
+`CONFIG_FILE` is an optional yaml file (default `.ski-lint.yml`) in which you can override any CLI argument or add
+additional configuration:
 
 ```yml
 accepted_values:
-  - U+E4
-  - U+2026
+    - U+E4
+    - U+2026
 context_width: 50
 ```
 
