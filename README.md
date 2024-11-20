@@ -81,7 +81,7 @@ This can be used as a [pre-commit](https://pre-commit.com/) hook:
 
 ```yaml
 - repo: https://github.com/svdimchenko/ski-lint
-  rev: v0.1.0
+  rev: v0.3.1
   hooks:
       - id: ski-lint
 ```
