@@ -4,10 +4,11 @@
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![image](https://img.shields.io/pypi/v/ski-lint.svg)](https://pypi.python.org/pypi/ski-lint)
 [![image](https://img.shields.io/pypi/l/ski-lint.svg)](https://github.com/svdimchenko/ski-lint/blob/main/LICENSE)
 [![image](https://img.shields.io/pypi/pyversions/ski-lint.svg)](https://pypi.python.org/pypi/ski-lint)
-[![Actions status](https://github.com/svdimchenko/ski-lint/actions/workflows/ci.yml/badge.svg)](https://github.com/astral-sh/ruff/actions)
+[![Actions status](https://github.com/svdimchenko/ski-lint/actions/workflows/ci.yml/badge.svg)](https://github.com/svdimchenko/ski-lint/actions)
 
 <!-- markdownlint-restore -->
 
