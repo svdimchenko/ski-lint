@@ -34,7 +34,7 @@ omegaconf = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
-pre-commit = "^3.0.0"
+pre-commit = ">=3,<5"
 nox = "^2024.4.15"
 mypy = "^1.10.0"
 ruff = "^0.7.4"
