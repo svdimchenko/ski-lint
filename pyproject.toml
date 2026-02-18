@@ -1,12 +1,15 @@
-[tool.poetry]
+[project]
 name = "ski-lint"
 version = "0.3.1"
 description = "A pre-commit hook, that enforces ASCII content."
-authors = ["Serhii Dimchenko <svdimchenko@gmail.com>"]
+authors = [{"name" = "Serhii Dimchenko", "email" = "svdimchenko@gmail.com"}]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/svdimchenko/ski-lint/"
-repository = "https://github.com/svdimchenko/ski-lint/"
+requires-python = ">=3.9"
+dependencies = [
+	"chardet>=5.2.0",
+	"omegaconf>=2.3.0",
+]
 
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
@@ -18,24 +21,19 @@ classifiers = [
 	"Programming Language :: Python :: 3.13",
 	"Topic :: Software Development :: Libraries :: Python Modules",
 	"Development Status :: 4 - Beta",
-	"License :: OSI Approved :: MIT License",
 ]
 
-[tool.poetry.scripts]
-ski-lint = 'ski_lint.cli:main'
+[project.scripts]
+ski-lint = "ski_lint.cli:main"
 
-[tool.poetry.extras]
-test = ["nox"]
-
-[tool.poetry.dependencies]
-python = ">=3.9"
-chardet = "^5.2.0"
-omegaconf = "^2.3.0"
+[project.optional-dependencies]
+test = [
+	"nox>=2024.4.15,<2026.0.0",
+]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
 pre-commit = ">=3,<5"
-nox = ">=2024.4.15,<2026.0.0"
 mypy = "^1.10.0"
 ruff = ">=0.7.4,<0.16.0"
 
