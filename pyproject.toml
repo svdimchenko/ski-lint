@@ -28,7 +28,7 @@ ski-lint = "ski_lint.cli:main"
 
 [project.optional-dependencies]
 test = [
-	"nox>=2024.4.15,<2026.0.0",
+	"nox>=2024.4.15,<2027.0.0",
 ]
 
 [tool.poetry.group.dev.dependencies]
