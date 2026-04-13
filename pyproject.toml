@@ -34,7 +34,7 @@ test = [
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.1"
 pre-commit = ">=3,<5"
-mypy = "^1.10.0"
+mypy = "^1.19.1"
 ruff = ">=0.7.4,<0.16.0"
 
 [tool.pytest.ini_options]
