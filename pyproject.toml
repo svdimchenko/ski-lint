@@ -5,7 +5,7 @@ description = "A pre-commit hook, that enforces ASCII content."
 authors = [{"name" = "Serhii Dimchenko", "email" = "svdimchenko@gmail.com"}]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
 	"chardet>=5.2.0",
 	"omegaconf>=2.3.0",
@@ -14,11 +14,10 @@ dependencies = [
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
 	"Programming Language :: Python",
-	"Programming Language :: Python :: 3.9",
-	"Programming Language :: Python :: 3.10",
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: 3.13",
+	"Programming Language :: Python :: 3.14",
 	"Topic :: Software Development :: Libraries :: Python Modules",
 	"Development Status :: 4 - Beta",
 ]
