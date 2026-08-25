@@ -4,7 +4,7 @@ from pathlib import Path
 
 import nox
 
-PYTHON_VERSIONS = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+PYTHON_VERSIONS = ["3.11", "3.12", "3.13", "3.14"]
 
 SOURCE_DIRECTORY = Path("ski_lint").resolve()
 TEST_DIRECTORY = Path("tests").resolve()
