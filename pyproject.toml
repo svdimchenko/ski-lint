@@ -32,7 +32,7 @@ test = [
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.2"
-ruff = ">=0.7.4,<0.16.0"
+ruff = ">=0.16.5,<0.17.0"
 nox = ">=2026.4.10,<2027.0.0"
 
 [tool.pytest.ini_options]
