@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-	"chardet>=5.2.0",
+	"chardet>=7.6.0",
 	"omegaconf>=2.3.0",
 ]
 
