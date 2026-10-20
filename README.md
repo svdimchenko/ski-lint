@@ -4,7 +4,6 @@
 
 [![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![image](https://img.shields.io/pypi/v/ski-lint.svg)](https://pypi.python.org/pypi/ski-lint)
 [![image](https://img.shields.io/pypi/l/ski-lint.svg)](https://github.com/svdimchenko/ski-lint/blob/main/LICENSE)
 [![image](https://img.shields.io/pypi/pyversions/ski-lint.svg)](https://pypi.python.org/pypi/ski-lint)
@@ -74,6 +73,14 @@ $ ski-lint tests/files/*/*.txt
 2024-10-03 16:24:50,339 - ERROR - tests/files/bad/umlaut.txt (utf-8), line 1, pos 547, char U+F6 'ö', context: 'gs. Waistcoat jianbing föur dollar toast jean shor'
 2024-10-03 16:24:50,339 - ERROR - tests/files/bad/umlaut.txt (utf-8), line 3, pos 190, char U+C5 'Å', context: 'eitan viral photo booth Åir plant cliche neutra la'
 2024-10-03 16:24:50,339 - ERROR - tests/files/bad/zero-width-space.txt (Windows-1252), line 1, pos 62, non-printable char U+200B, context: 'ace (U+200B) at the end!U+200B'
+```
+
+You can also pass glob patterns directly to `ski-lint`. Quote patterns containing `*` so the tool
+expands them itself; recursive patterns such as `**/*` are supported. Directory arguments are
+scanned recursively:
+
+```shell
+ski-lint --check '**/*'
 ```
 
 ## Pre-Commit
