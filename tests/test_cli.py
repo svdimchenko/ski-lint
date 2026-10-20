@@ -26,6 +26,31 @@ def test_no_files_given(ski_lint_bin):
     assert res.returncode == 1
 
 
+def test_recursive_glob_includes_files_and_skips_directories(ski_lint_bin, tmp_path):
+    bad_file = tmp_path / "nested" / "deep" / "bad.txt"
+    bad_file.parent.mkdir(parents=True)
+    bad_file.write_text("non-ASCII: ä\n", encoding="utf-8")
+    (tmp_path / "good.txt").write_text("ASCII\n", encoding="ascii")
+
+    cmd = [ski_lint_bin, "--check", "**/*"]
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False, cwd=tmp_path)
+
+    assert res.returncode == 1
+    assert "nested/deep/bad.txt" in res.stdout
+
+
+def test_directory_argument_scans_files_recursively(ski_lint_bin, tmp_path):
+    bad_file = tmp_path / "nested" / "bad.txt"
+    bad_file.parent.mkdir()
+    bad_file.write_text("non-ASCII: ä\n", encoding="utf-8")
+
+    cmd = [ski_lint_bin, "--check", str(tmp_path)]
+    res = subprocess.run(cmd, capture_output=True, text=True, check=False)
+
+    assert res.returncode == 1
+    assert str(bad_file) in res.stdout
+
+
 def test_files_output_good(caplog, ski_lint_bin, test_files_good):
     exp = "NON-ASCII CHECK: OK"
 

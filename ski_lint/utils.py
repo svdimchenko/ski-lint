@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import glob
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -11,6 +12,22 @@ if TYPE_CHECKING:
     import chardet
 
 ALLOWED_ENCODINGS = (None, "ascii")
+
+
+def expand_filenames(filenames: list[str]) -> list[str]:
+    """Expand glob patterns and directories into unique file paths."""
+    expanded_filenames: list[str] = []
+
+    for filename in filenames:
+        matches = glob.glob(filename, recursive=True) or [filename]  # noqa: PTH207
+        for match in matches:
+            path = Path(match)
+            if path.is_dir():
+                expanded_filenames.extend(str(child) for child in sorted(path.rglob("*")) if child.is_file())
+            elif path.is_file() or not glob.has_magic(filename):
+                expanded_filenames.append(match)
+
+    return list(dict.fromkeys(expanded_filenames))
 
 
 class LineAnalysisResult:

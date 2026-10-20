@@ -11,7 +11,7 @@ from importlib.metadata import version
 
 from omegaconf import DictConfig, ListConfig, OmegaConf, ValidationError
 
-from .utils import extract_context, get_non_ascii_files, get_non_ascii_lines
+from .utils import expand_filenames, extract_context, get_non_ascii_files, get_non_ascii_lines
 
 logging.basicConfig(
     format="{asctime} - {levelname} - {message}",
@@ -82,11 +82,13 @@ def get_config(args: Namespace) -> ListConfig | DictConfig:
     config = OmegaConf.merge(config, OmegaConf.create(filtered_args_dict))
 
     log.debug(f"config after cli merge: {config}")
-    OmegaConf.set_readonly(conf=config, value=True)
 
+    config.filenames = expand_filenames(config.filenames)
     if not config.filenames:
         err_msg = "No filenames provided"
         raise ValidationError(err_msg)
+
+    OmegaConf.set_readonly(conf=config, value=True)
 
     return config
 
